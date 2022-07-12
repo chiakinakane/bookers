@@ -7,14 +7,14 @@ class BooksController < ApplicationController
   
    def create
     @book = Book.new(book_params)
+    
     if @book.save
-      redirect_to book_path(@book.id)
+       redirect_to book_path(@book.id), notice: 'Book was successfully created.'
     else
-      render :new
+      @books = Book.all
+      render :index
     end  
   end
-  
-  
   
   def show
    @book = Book.find(params[:id])  
@@ -22,17 +22,17 @@ class BooksController < ApplicationController
   
   
   def edit
-   @book = Book.find(params[:id])
+   @book = Book.find(params[:id]) 
   end
-  
- 
- 
   
   
   def update
-    book = Book.find(params[:id])
-    book.update(book_params)
-    redirect_to book_path(book.id)  
+    @book = Book.find(params[:id])
+     if @book.update(book_params)
+       redirect_to book_path(@book.id), notice: 'Book was successfully updated.'
+    else
+      render :edit
+    end  
   end
   
   
@@ -42,11 +42,6 @@ class BooksController < ApplicationController
     redirect_to '/books'  # 投稿一覧画面へリダイレクト 
     
   end
-  
-  
-  
-  
-
 
   private
   # ストロングパラメータ
